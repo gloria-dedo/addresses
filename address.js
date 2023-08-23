@@ -122,13 +122,17 @@ async function payroll(amount, sender, employees) {
 
 async function getAddress(address) {
   const blockNumber = await provider.getBlockNumber();
-  const block = await provider.getBlockWithTransactions(blockNumber);
 
-  const transactionsInvolvingAddress = block.transactions.filter(
-    (tx) => tx.from === address || tx.to === address
-  );
+  const addresses = [];
 
-  console.log("Transactions involving address", transactionsInvolvingAddress);
+  for(let i = 0; i <= blockNumber; i++) {
+    const block = await provider.getBlockWithTransactions(blockNumber);
+    const transactions = block.transactions.filter((tx) => tx.from === address);
+
+    addresses.push(...transactions.map(tx => tx.to));
+  }
+
+  console.log("Transactions", addresses);
 }
 
 // function findAddresses(address) return list of addresses
