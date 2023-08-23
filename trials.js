@@ -121,17 +121,18 @@ async function payroll(amount, sender, employees) {
 }
 
 async function getAddress(address) {
-  const latestBlockNumber = await provider.getBlockNumber();
+  const blockNumber = await provider.getBlockNumber();
 
-  const addresses = []
-  for (let blockNumber = 0; blockNumber < latestBlockNumber; latestBlockNumber++) {
+  const addresses = [];
+
+  for(let i = 0; i <= blockNumber; i++) {
     const block = await provider.getBlockWithTransactions(blockNumber);
-    
-    const transactionsInvolvingAddress = block.transactions.filter((tx) => tx.from === address);
+    const transactions = block.transactions.filter((tx) => tx.from === address);
 
-  return addresses.push(transactionsInvolvingAddress.map(transaction => transaction.to));
-//   console.log("Transactions involving address", transactionsInvolvingAddress);
-}
+    addresses.push(...transactions.map(tx => tx.to));
+  }
+
+  console.log("Transactions", addresses);
 }
 
 // function findAddresses(address) return list of addresses
